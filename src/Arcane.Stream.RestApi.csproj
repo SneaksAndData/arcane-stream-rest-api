@@ -3,7 +3,8 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
-        <PackageId>SnD.Sdk</PackageId>
+        <LangVersion>10</LangVersion>
+        <RootNamespace>Arcane.Stream.RestApi</RootNamespace>
     </PropertyGroup>
     
     <ItemGroup>
