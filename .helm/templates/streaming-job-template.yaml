@@ -30,6 +30,10 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
         spec:
+          {{- with .Values.jobTemplateSettings.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           containers:
             - name: arcane-stream
               image: "{{ include "app.image" . }}"
@@ -77,7 +81,7 @@ spec:
           - action: Ignore
             onExitCodes:
               operator: In
-              {{- with .Values.jobTemplateSettings.exitCodes.retryOnExitCodes }}
+              {{- with .Values.jobTemplateSettings.podFailurePolicySettings.retryOnExitCodes }}
               values:
                 {{- toYaml . | nindent 16 }}
               {{- end }}

@@ -32,20 +32,35 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
+# Additional labels for the stream classes
+additionalLabels: {}
+# Example:
+#
+#  app.my-company.com/name: arcane-stream
+#  app.my-company.com/component: streaming
+
+# Additional labels for the stream classes
+additionalAnnotations: {}
+# Example:
+#
+#  app.my-company.com/name: arcane-stream
+#  app.my-company.com/source: restapi
+#  app.my-company.com/application: arcane
+
 jobTemplateSettings:
   create: true
   
   # Job backoff limit
   backoffLimit: 3
   
-  # Additional labels for the deployment and pods
+  # Additional labels for the streaming jobs and pods
   additionalLabels: {}
   # Example:
   #
   #  app.my-company.com/name: arcane-stream
   #  app.my-company.com/component: streaming
 
-  # Additional labels for the deployment and pods
+  # Additional labels for the streaming jobs and pods
   additionalAnnotations: {}
   # Example:
   #
@@ -53,7 +68,7 @@ jobTemplateSettings:
   #  app.my-company.com/source: restapi
   #  app.my-company.com/application: arcane
 
-  # Extra environment variables to set in the deployment
+  # Extra environment variables to set in the the streaming job
   extraEnv: {}
   # Example:
   #
@@ -68,7 +83,7 @@ jobTemplateSettings:
   #    - configMapRef:
   #        name: custom-api-access-token
 
-  # Extra volumes to add to the deployment
+  # Extra volumes to add to the streaming job
   extraVolumes: {}
   # Example:
   # 
@@ -76,7 +91,7 @@ jobTemplateSettings:
   #    emptyDir:
   #      sizeLimit: 500Mi
 
-  # Extra volumes to add to the deployment
+  # Extra volumes to add to the streaming job
   extraVolumeMounts: {}
   # Example:
   #
@@ -112,9 +127,13 @@ jobTemplateSettings:
     seccompProfile:
       type: RuntimeDefault
 
-  exitCodes:
-    retryExitCode:
+  
+  # Allows to specify a custom settings for pod failure policy
+  podFailurePolicySettings:
+    
+    # Specifies the list of exit codes that should trigger a retry without incrementing the retry count
     retryOnExitCodes: 
+      # The stream container completes with this exit code when a retryable error occurs
+      # Like rate by the server limiting, transient connection errors etc.
       - 2
-      - 137
 
