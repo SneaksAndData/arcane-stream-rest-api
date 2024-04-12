@@ -12,7 +12,7 @@ If release name contains chart name it will be used as a full name.
 */}}
 {{- define "app.fullname" -}}
 {{- $name := .Chart.Name }}
-{{- if contains $name .Release.Name }}
+{{- if contains .Release.Name $name }}
 {{- .Release.Name | trunc 63 | trimSuffix "-" }}
 {{- else }}
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
@@ -55,4 +55,11 @@ Create the name of the service account to use
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
+{{- end }}
+
+{{/*
+Generage image reference based on image repository and tag
+*/}}
+{{- define "app.image" -}}
+{{- printf "%s:%s" .Values.image.repository  (default (printf "v%s" .Chart.AppVersion) .Values.image.tag) }}
 {{- end }}
