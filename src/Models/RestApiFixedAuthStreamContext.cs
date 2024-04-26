@@ -1,26 +1,18 @@
 ﻿using System;
+using Arcane.Framework.Configuration;
 using Arcane.Framework.Sources.RestApi.Models;
 using Arcane.Stream.RestApi.Models.Base;
+using Newtonsoft.Json;
 
-namespace Arcane.Stream.RestApi.Streams.RestApiPagedDynamicAuth.Models;
+namespace Arcane.Stream.RestApi.Models;
 
-public class RestApiPagedDynamicAuthStreamContext : RestApiDynamicAuthBase
+public class RestApiFixedAuthStreamContext : RestApiFixedAuthBase
 {
-    /// <summary>
-    /// Optional fixed expiration period for the token.
-    /// </summary>
-    public TimeSpan? ExpirationPeriod { get; init; }
-
-    /// <summary>
-    /// Configuration for the page resolver.
-    /// </summary>
-    public PageResolverConfiguration PageResolverConfiguration { get; init; }
-
     /// <summary>
     /// Templated url field parameters.
     /// </summary>
     public RestApiTemplatedField[] TemplatedFields { get; init; }
-
+    
     /// <summary>
     /// Base url template for this source.
     /// </summary>
@@ -32,19 +24,15 @@ public class RestApiPagedDynamicAuthStreamContext : RestApiDynamicAuthBase
     public string BodyTemplate { get; init; }
     
     /// <summary>
-    /// Start date for the backfill.
-    /// </summary>
-    public DateTimeOffset BackFillStartDate { get; init; }
-    
-    /// <summary>
-    /// Properties to traverse before [{..}, {..}, ..] structure is reached in the response.
-    /// </summary>
-    public string[] ResponsePropertyKeyChain { get; init; }
-    
-    /// <summary>
     /// Http method to be used: GET or POST.
     /// </summary>
-    public string HttpMethod { get; init; }    
+    public string HttpMethod { get; init; }
+
+    /// <summary>
+    /// Start date for the backfill.
+    /// </summary>
+    [JsonConverter(typeof(UnixTimeConverter))]
+    public DateTimeOffset BackFillStartDate { get; init; }
 
     /// <summary>
     /// Number of JsonElements per single json file.
@@ -57,7 +45,7 @@ public class RestApiPagedDynamicAuthStreamContext : RestApiDynamicAuthBase
     public TimeSpan GroupingInterval { get; init; }
 
     /// <summary>
-    /// Data location for the sink.
+    /// Data location for parquet files.
     /// </summary>
     public string SinkLocation { get; init; }
 

@@ -10,12 +10,10 @@ using Arcane.Framework.Sources.RestApi.Extensions;
 using Arcane.Framework.Sources.RestApi.Services.AuthenticatedMessageProviders;
 using Arcane.Framework.Sources.RestApi.Services.UriProviders;
 using Arcane.Stream.RestApi.Extensions;
+using Arcane.Stream.RestApi.Models;
 using Polly;
 using Snd.Sdk.Metrics.Base;
 using Snd.Sdk.Storage.Base;
-using Arcane.Stream.RestApi.Streams.RestApiFixedAuth.Models;
-using Arcane.Stream.RestApi.Streams.RestApiPagedDynamicAuth.Models;
-using Arcane.Stream.RestApi.Streams.RestApiPagedFixedAuth.Configuration;
 
 namespace Arcane.Stream.RestApi.Services;
 

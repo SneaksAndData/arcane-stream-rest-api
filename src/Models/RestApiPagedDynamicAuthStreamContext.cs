@@ -1,13 +1,21 @@
 ﻿using System;
-using Arcane.Framework.Configuration;
 using Arcane.Framework.Sources.RestApi.Models;
 using Arcane.Stream.RestApi.Models.Base;
-using Newtonsoft.Json;
 
-namespace Arcane.Stream.RestApi.Streams.RestApiDynamicAuth.Models;
+namespace Arcane.Stream.RestApi.Models;
 
-public class RestApiDynamicAuthStreamContext : RestApiDynamicAuthBase
+public class RestApiPagedDynamicAuthStreamContext : RestApiDynamicAuthBase
 {
+    /// <summary>
+    /// Optional fixed expiration period for the token.
+    /// </summary>
+    public TimeSpan? ExpirationPeriod { get; init; }
+
+    /// <summary>
+    /// Configuration for the page resolver.
+    /// </summary>
+    public PageResolverConfiguration PageResolverConfiguration { get; init; }
+
     /// <summary>
     /// Templated url field parameters.
     /// </summary>
@@ -26,7 +34,6 @@ public class RestApiDynamicAuthStreamContext : RestApiDynamicAuthBase
     /// <summary>
     /// Start date for the backfill.
     /// </summary>
-    [JsonConverter(typeof(UnixTimeConverter))]
     public DateTimeOffset BackFillStartDate { get; init; }
     
     /// <summary>

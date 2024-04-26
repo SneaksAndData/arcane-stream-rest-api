@@ -1,18 +1,23 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 using Arcane.Framework.Configuration;
 using Arcane.Framework.Sources.RestApi.Models;
 using Arcane.Stream.RestApi.Models.Base;
-using Newtonsoft.Json;
 
-namespace Arcane.Stream.RestApi.Streams.RestApiFixedAuth.Models;
+namespace Arcane.Stream.RestApi.Models;
 
-public class RestApiFixedAuthStreamContext : RestApiFixedAuthBase
+public class RestApiPagedFixedAuthStreamContext : RestApiFixedAuthBase
 {
+    /// <summary>
+    /// Configuration for the page resolver.
+    /// </summary>
+    public PageResolverConfiguration PageResolverConfiguration { get; init; }
+
     /// <summary>
     /// Templated url field parameters.
     /// </summary>
     public RestApiTemplatedField[] TemplatedFields { get; init; }
-    
+
     /// <summary>
     /// Base url template for this source.
     /// </summary>
@@ -24,15 +29,20 @@ public class RestApiFixedAuthStreamContext : RestApiFixedAuthBase
     public string BodyTemplate { get; init; }
     
     /// <summary>
-    /// Http method to be used: GET or POST.
-    /// </summary>
-    public string HttpMethod { get; init; }
-
-    /// <summary>
     /// Start date for the backfill.
     /// </summary>
     [JsonConverter(typeof(UnixTimeConverter))]
     public DateTimeOffset BackFillStartDate { get; init; }
+    
+    /// <summary>
+    /// Properties to traverse before [{..}, {..}, ..] structure is reached in the response.
+    /// </summary>
+    public string[] ResponsePropertyKeyChain { get; init; }
+    
+    /// <summary>
+    /// Http method to be used: GET or POST.
+    /// </summary>
+    public string HttpMethod { get; init; }    
 
     /// <summary>
     /// Number of JsonElements per single json file.
@@ -42,12 +52,14 @@ public class RestApiFixedAuthStreamContext : RestApiFixedAuthBase
     /// <summary>
     /// Max time to wait for rowsPerGroup to accumulate.
     /// </summary>
+    [JsonConverter(typeof(SecondsToTimeSpanConverter))]
+    [JsonPropertyName("groupingIntervalSeconds")]
     public TimeSpan GroupingInterval { get; init; }
 
     /// <summary>
-    /// Data location for parquet files.
+    /// Data location for the sink.
     /// </summary>
-    public string SinkLocation { get; init; }
+    public string SinkLocation { get; set; }
 
     /// <summary>
     /// Number of seconds to look back when determining first set of changes to extract.
@@ -62,6 +74,7 @@ public class RestApiFixedAuthStreamContext : RestApiFixedAuthBase
     /// <summary>
     /// How long to wait before polling for next result set.
     /// </summary>
+    [JsonPropertyName("changeCaptureIntervalSeconds")]
     public int ChangeCaptureInterval { get; init; }
     
     /// <summary>
