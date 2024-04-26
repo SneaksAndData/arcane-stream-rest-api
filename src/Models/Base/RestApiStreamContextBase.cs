@@ -1,6 +1,8 @@
-﻿using Arcane.Framework.Services.Base;
+﻿using System;
+using System.Text.Json;
+using Arcane.Framework.Services.Base;
 
-namespace Arcane.Stream.RestApi.Configurations.Base;
+namespace Arcane.Stream.RestApi.Models.Base;
 
 /// <summary>
 /// Base class for REST Api streaming configurations
@@ -33,4 +35,13 @@ public abstract class RestApiStreamContextBase: IStreamContext, IStreamContextWr
     {
         this.StreamKind = streamKind;
     }
+
+    public abstract RestApiStreamContextBase LoadSecrets();
+
+    protected string GetSecretFromEnvironment(string secretName)
+        => Environment.GetEnvironmentVariable($"{nameof(Arcane)}__{secretName}");
+
+    protected TResultType GetJSONSecretFromEnvironment<TResultType>(string secretName)
+        => JsonSerializer.Deserialize<TResultType>(this.GetSecretFromEnvironment(secretName) ??
+                                                   throw new ArgumentNullException($"{nameof(Arcane)}__{secretName}"));
 }
