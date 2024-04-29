@@ -1,4 +1,4 @@
-apiVersion: stream-classes.streaming.sneaksanddata.com/v1beta1
+apiVersion: streaming.sneaksanddata.com/v1beta1
 kind: StreamClass
 metadata:
   name: {{ template "app.name" . }}-api-fas

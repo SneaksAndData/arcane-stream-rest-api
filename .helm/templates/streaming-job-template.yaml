@@ -1,6 +1,6 @@
 {{- if and .Values.jobTemplateSettings.create -}}
 apiVersion: streaming.sneaksanddata.com/v1
-kind: StreamingjobTemplate
+kind: StreamingJobTemplate
 metadata:
   name: {{ include "app.name" $ }}
 spec:
