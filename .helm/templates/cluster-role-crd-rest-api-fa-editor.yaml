@@ -15,4 +15,5 @@ rules:
         - streaming.sneaksanddata.com
       resources:
         - api-fas
+        - api-fas/status
 {{- end }}
