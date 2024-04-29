@@ -30,11 +30,7 @@ jobs:
       - name: Restore dependencies
         env:
           NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
-        run: |
-          set -e
-          dotnet nuget add source --username USERNAME --password $NUGET_TOKEN --store-password-in-clear-text --name github "https://nuget.pkg.github.com/SneaksAndData/index.json"
-          dotnet clean && dotnet nuget locals all --clear
-          dotnet restore
+        run: dotnet clean && dotnet nuget locals all --clear && dotnet restore
 
       - name: Build
         run: dotnet build --no-restore

@@ -31,6 +31,27 @@ serviceAccount:
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: ""
+  
+rbac:
+  
+  # Specifies whether RBAC resources should be created
+  clusterRole:
+    
+    # Allows the Arcane Operator to create and manage jobs in the cluster
+    restApiFixedAuthViewer:
+      create: true
+      nameOverride: ""
+      
+    # Allows the Arcane Operator to create and manage jobs in the cluster
+    restApiFixedAuthEditor:
+      create: true
+      nameOverride: ""
+      
+  # This parameter determines whether role binding resources need to be created.
+  # If you have any roles in your configuration set to 'true', then this parameter for creating role binding resources
+  # should also be set to 'true'.
+  clusterRoleBindings:
+    create: true
 
 # Additional labels for the stream classes
 additionalLabels: {}

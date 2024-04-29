@@ -81,3 +81,25 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{ toYaml . }}
 {{- end }}
 {{- end }}
+
+{{/*
+Generate the job template viewer cluster role name
+*/}}
+{{- define "app.clusteRole.restApiFixedAuthViewer" -}}
+{{- if .Values.rbac.clusterRole.restApiFixedAuthViewer.nameOverride }}
+{{- .Values.rbac.clusterRole.restApiFixedAuthViewer.nameOverride }}
+{{- else }}
+{{- printf "%s-rest-api-fa-viewer" (include "app.fullname" .) }}
+{{- end }}
+{{- end }}
+
+{{/*
+Generate the job template editor cluster role name
+*/}}
+{{- define "app.clusteRole.restApiFixedAuthEditor" -}}
+{{- if .Values.rbac.clusterRole.restApiFixedAuthEditor.nameOverride }}
+{{- .Values.rbac.clusterRole.restApiFixedAuthEditor.nameOverride }}
+{{- else }}
+{{- printf "%s-rest-api-fa-editor" (include "app.fullname" .) }}
+{{- end }}
+{{- end }}
