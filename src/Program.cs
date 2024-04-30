@@ -53,11 +53,10 @@ catch (Exception ex)
 {
     Log.Fatal(ex, "Host terminated unexpectedly");
     exitCode = ExitCodes.FATAL;
-    Log.CloseAndFlush();
 }
 finally
 {
-    Log.CloseAndFlush();
+    await Log.CloseAndFlushAsync();
 }
 
 return exitCode;

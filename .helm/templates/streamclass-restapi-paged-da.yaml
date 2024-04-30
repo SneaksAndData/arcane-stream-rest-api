@@ -1,7 +1,7 @@
 apiVersion: streaming.sneaksanddata.com/v1beta1
 kind: StreamClass
 metadata:
-  name: {{ template "app.name" . }}-api-fas
+  name: {{ template "app.name" . }}-paged-da
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "streamclass.labels" $ | nindent 4 }}
@@ -16,3 +16,5 @@ spec:
   kindRef: RestApiPagedDynamicAuth
   apiVersion: v1beta1
   pluralName: api-pdas
+  secretRefs:
+    - credentialSecretRef
