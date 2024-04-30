@@ -32,6 +32,11 @@ try
                 var contextNS = typeof(RestApiFixedAuthStreamContext).Namespace;
                 var typeFullName = $"{contextNS}.{context.StreamKind}StreamContext";
                 var targetType = Assembly.GetExecutingAssembly().GetType(typeFullName);
+                Log.Logger.Information("Loading target type with name {TypeName}", typeFullName);
+                if (targetType is null)
+                {
+                    throw new ArgumentException($"Unknown stream kind {context.StreamKind}. Cannot load stream context.");
+                }
                 return ((RestApiStreamContextBase)StreamContext.ProvideFromEnvironment(targetType)).LoadSecrets();
             });
         })
