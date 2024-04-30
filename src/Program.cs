@@ -16,11 +16,12 @@ using Snd.Sdk.Storage.Providers;
 using Snd.Sdk.Storage.Providers.Configurations;
 
 Log.Logger = DefaultLoggingProvider.CreateBootstrapLogger(nameof(Arcane));
+
 int exitCode;
 try
 {
     exitCode = await Host.CreateDefaultBuilder(args)
-        .AddDatadogLogging()
+        .AddDatadogLogging( (_, _, configuration) => configuration.WriteTo.Console())
         .ConfigureRequiredServices(services =>
         {
             return services.AddStreamGraphBuilder<RestApiGraphBuilder>(context =>
@@ -46,11 +47,12 @@ try
 catch (Exception ex)
 {
     Log.Fatal(ex, "Host terminated unexpectedly");
-    return ExitCodes.FATAL;
+    exitCode = ExitCodes.FATAL;
+    Log.CloseAndFlush();
 }
 finally
 {
-    await Log.CloseAndFlushAsync();
+    Log.CloseAndFlush();
 }
 
 return exitCode;
