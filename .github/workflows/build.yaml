@@ -30,11 +30,7 @@ jobs:
       - name: Restore dependencies
         env:
           NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
-        run: |
-          set -e
-          dotnet nuget add source --username USERNAME --password $NUGET_TOKEN --store-password-in-clear-text --name github "https://nuget.pkg.github.com/SneaksAndData/index.json"
-          dotnet clean && dotnet nuget locals all --clear
-          dotnet restore
+        run: dotnet clean && dotnet nuget locals all --clear && dotnet restore
 
       - name: Build
         run: dotnet build --no-restore
@@ -100,3 +96,11 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/arm64,linux/amd64
+          
+      - name: Build and Push Chart
+        uses: SneaksAndData/github-actions/build_helm_chart@v0.1.6
+        with:
+          application: arcane-stream-rest-api
+          container_registry_user: ${{ github.actor }}
+          container_registry_token: ${{ secrets.GITHUB_TOKEN }}
+          container_registry_address: ghcr.io/sneaksanddata/
