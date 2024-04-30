@@ -17,4 +17,4 @@ spec:
   apiVersion: v1beta1
   pluralName: api-fas
   secretRefs:
-    - name: credentialSecretRef
+    - credentialSecretRef
