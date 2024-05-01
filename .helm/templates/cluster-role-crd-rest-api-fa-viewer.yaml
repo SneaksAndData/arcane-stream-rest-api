@@ -5,6 +5,7 @@ metadata:
   name: {{ include "app.clusteRole.restApiFixedAuthViewer" . }}
   labels:
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
+    rbac.authorization.k8s.io/aggregate-to-view: "true"
 rules:
     - verbs:
         - get

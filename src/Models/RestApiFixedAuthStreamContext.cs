@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 using Arcane.Framework.Configuration;
 using Arcane.Framework.Sources.RestApi.Models;
 using Arcane.Stream.RestApi.Models.Base;
-using Newtonsoft.Json;
 
 namespace Arcane.Stream.RestApi.Models;
 
@@ -42,6 +42,8 @@ public class RestApiFixedAuthStreamContext : RestApiFixedAuthBase
     /// <summary>
     /// Max time to wait for rowsPerGroup to accumulate.
     /// </summary>
+    [JsonConverter(typeof(SecondsToTimeSpanConverter))]
+    [JsonPropertyName("groupingIntervalSeconds")]
     public TimeSpan GroupingInterval { get; init; }
 
     /// <summary>
@@ -62,6 +64,7 @@ public class RestApiFixedAuthStreamContext : RestApiFixedAuthBase
     /// <summary>
     /// How long to wait before polling for next result set.
     /// </summary>
+    [JsonPropertyName("changeCaptureIntervalSeconds")]
     public int ChangeCaptureInterval { get; init; }
     
     /// <summary>

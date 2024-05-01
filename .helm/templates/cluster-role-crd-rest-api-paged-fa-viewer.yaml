@@ -1,0 +1,19 @@
+{{- if .Values.rbac.clusterRole.restApiPagedFixedAuthViewer.create -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "app.clusteRole.restApiPagedFixedAuthViewer" . }}
+  labels:
+    rbac.authorization.k8s.io/aggregate-to-edit: "true"
+    rbac.authorization.k8s.io/aggregate-to-view: "true"
+rules:
+  - verbs:
+      - get
+      - list
+      - watch
+    apiGroups:
+      - streaming.sneaksanddata.com
+    resources:
+      - api-pfas
+      - api-pfas/status
+{{- end }}

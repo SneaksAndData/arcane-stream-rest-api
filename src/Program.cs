@@ -16,11 +16,12 @@ using Snd.Sdk.Storage.Providers;
 using Snd.Sdk.Storage.Providers.Configurations;
 
 Log.Logger = DefaultLoggingProvider.CreateBootstrapLogger(nameof(Arcane));
+
 int exitCode;
 try
 {
     exitCode = await Host.CreateDefaultBuilder(args)
-        .AddDatadogLogging()
+        .AddDatadogLogging( (_, _, configuration) => configuration.WriteTo.Console())
         .ConfigureRequiredServices(services =>
         {
             return services.AddStreamGraphBuilder<RestApiGraphBuilder>(context =>
@@ -31,6 +32,10 @@ try
                 var contextNS = typeof(RestApiFixedAuthStreamContext).Namespace;
                 var typeFullName = $"{contextNS}.{context.StreamKind}StreamContext";
                 var targetType = Assembly.GetExecutingAssembly().GetType(typeFullName);
+                if (targetType is null)
+                {
+                    throw new ArgumentException($"Unknown stream kind {typeFullName}. Cannot load stream context.");
+                }
                 return ((RestApiStreamContextBase)StreamContext.ProvideFromEnvironment(targetType)).LoadSecrets();
             });
         })

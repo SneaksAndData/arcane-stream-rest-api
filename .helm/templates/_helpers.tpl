@@ -42,6 +42,20 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
+Job template standard labels
+*/}}
+{{- define "job.labels" -}}
+helm.sh/chart: {{ include "app.chart" . }}
+{{ include "app.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+{{- with .Values.jobTemplateSettings.additionalLabels }}
+{{ toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
 Selector labels
 */}}
 {{- define "app.selectorLabels" -}}
@@ -83,7 +97,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
-Generate the job template viewer cluster role name
+Generate the CR viewer cluster role name
 */}}
 {{- define "app.clusteRole.restApiFixedAuthViewer" -}}
 {{- if .Values.rbac.clusterRole.restApiFixedAuthViewer.nameOverride }}
@@ -94,12 +108,56 @@ Generate the job template viewer cluster role name
 {{- end }}
 
 {{/*
-Generate the job template editor cluster role name
+Generate the CR editor cluster role name
 */}}
 {{- define "app.clusteRole.restApiFixedAuthEditor" -}}
 {{- if .Values.rbac.clusterRole.restApiFixedAuthEditor.nameOverride }}
 {{- .Values.rbac.clusterRole.restApiFixedAuthEditor.nameOverride }}
 {{- else }}
 {{- printf "%s-rest-api-fa-editor" (include "app.fullname" .) }}
+{{- end }}
+{{- end }}
+
+{{/*
+Generate the CR viewer cluster role name
+*/}}
+{{- define "app.clusteRole.restApiPagedDynamicAuthViewer" -}}
+{{- if .Values.rbac.clusterRole.restApiFixedAuthViewer.nameOverride }}
+{{- .Values.rbac.clusterRole.restApiFixedAuthViewer.nameOverride }}
+{{- else }}
+{{- printf "%s-rest-api-pda-viewer" (include "app.fullname" .) }}
+{{- end }}
+{{- end }}
+
+{{/*
+Generate the CR editor cluster role name
+*/}}
+{{- define "app.clusteRole.restApiPagedDynamicAuthEditor" -}}
+{{- if .Values.rbac.clusterRole.restApiFixedAuthEditor.nameOverride }}
+{{- .Values.rbac.clusterRole.restApiFixedAuthEditor.nameOverride }}
+{{- else }}
+{{- printf "%s-rest-api-pda-editor" (include "app.fullname" .) }}
+{{- end }}
+{{- end }}
+
+{{/*
+Generate the CR viewer cluster role name
+*/}}
+{{- define "app.clusteRole.restApiPagedFixedAuthViewer" -}}
+{{- if .Values.rbac.clusterRole.restApiFixedAuthViewer.nameOverride }}
+{{- .Values.rbac.clusterRole.restApiFixedAuthViewer.nameOverride }}
+{{- else }}
+{{- printf "%s-rest-api-pfa-viewer" (include "app.fullname" .) }}
+{{- end }}
+{{- end }}
+
+{{/*
+Generate the CR editor cluster role name
+*/}}
+{{- define "app.clusteRole.restApiPagedFixedAuthEditor" -}}
+{{- if .Values.rbac.clusterRole.restApiFixedAuthEditor.nameOverride }}
+{{- .Values.rbac.clusterRole.restApiFixedAuthEditor.nameOverride }}
+{{- else }}
+{{- printf "%s-rest-api-pfa-editor" (include "app.fullname" .) }}
 {{- end }}
 {{- end }}

@@ -37,13 +37,33 @@ rbac:
   # Specifies whether RBAC resources should be created
   clusterRole:
     
-    # Allows the Arcane Operator to create and manage jobs in the cluster
+    # Allows the service account to list and view custom resources
     restApiFixedAuthViewer:
       create: true
       nameOverride: ""
       
-    # Allows the Arcane Operator to create and manage jobs in the cluster
+    # Allows the service account to update custom resources
     restApiFixedAuthEditor:
+      create: true
+      nameOverride: ""
+      
+    # Allows the service account to list and view custom resources
+    restApiPagedDynamicAuthViewer:
+      create: true
+      nameOverride: ""
+    
+    # Allows the service account to update custom resources
+    restApiPagedDynamicAuthEditor:
+      create: true
+      nameOverride: ""
+      
+    # Allows the service account to list and view custom resources
+    restApiPagedFixedAuthViewer:
+      create: true
+      nameOverride: ""
+    
+    # Allows the service account to update custom resources
+    restApiPagedFixedAuthEditor:
       create: true
       nameOverride: ""
       

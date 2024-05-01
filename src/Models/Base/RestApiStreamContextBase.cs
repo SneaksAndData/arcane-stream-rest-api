@@ -39,7 +39,7 @@ public abstract class RestApiStreamContextBase: IStreamContext, IStreamContextWr
     public abstract RestApiStreamContextBase LoadSecrets();
 
     protected string GetSecretFromEnvironment(string secretName)
-        => Environment.GetEnvironmentVariable($"{nameof(Arcane)}__{secretName}");
+        => Environment.GetEnvironmentVariable($"{nameof(Arcane)}__{secretName}".ToUpperInvariant());
 
     protected TResultType GetJSONSecretFromEnvironment<TResultType>(string secretName)
         => JsonSerializer.Deserialize<TResultType>(this.GetSecretFromEnvironment(secretName) ??
