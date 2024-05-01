@@ -4,8 +4,16 @@ kind: ClusterRole
 metadata:
   name: {{ include "app.clusteRole.restApiPagedDynamicAuthViewer" . }}
   labels:
-    rbac.authorization.k8s.io/aggregate-to-edit: "true"
     rbac.authorization.k8s.io/aggregate-to-view: "true"
+    rbac.authorization.k8s.io/aggregate-to-edit: "true"
+    {{- include "app.labels" $ | nindent 4 }}
+    {{- with .Values.rbac.clusterRole.restApiPagedDynamicAuthViewer.additionalLabels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.rbac.clusterRole.restApiPagedDynamicAuthViewer.additionalAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 rules:
   - verbs:
       - get
