@@ -67,6 +67,12 @@ spec:
                 {{- toYaml . | nindent 16 }}
               {{- end }}
           restartPolicy: Never
+          {{- if .Values.jobTemplateSettings.extraVolumes }}
+          volumes:
+              {{- with .Values.jobTemplateSettings.extraVolumes }}
+                {{- toYaml . | nindent 12 }}
+              {{- end }}
+          {{- end }}
           serviceAccountName: {{ include "app.serviceAccountName" . }}
           {{- with .Values.jobTemplateSettings.tolerations }}
           tolerations:
