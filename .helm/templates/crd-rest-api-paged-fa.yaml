@@ -128,6 +128,9 @@ spec:
                     responseSize:
                       type: integer
                       nullable: true
+                    startOffset:
+                      type: integer
+                      nullable: true
                 backFillStartDate:
                   type: integer
                   description: Start date for the backfill.
