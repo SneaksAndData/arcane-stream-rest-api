@@ -8,7 +8,7 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="SnD.Sdk" Version="1.1.0" />
+        <PackageReference Include="SnD.Sdk" Version="1.1.4" />
         <PackageReference Include="Arcane.Framework" Version="0.0.11" />
         <PackageReference Include="System.Text.Json" Version="8.0.3" />
     </ItemGroup>
