@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Snd.Sdk.Logs.Providers;
+using Snd.Sdk.Metrics.Configurations;
 using Snd.Sdk.Metrics.Providers;
 using Snd.Sdk.Storage.Base;
 using Snd.Sdk.Storage.Providers;
@@ -42,7 +43,7 @@ try
         .ConfigureAdditionalServices((services, context) =>
          {
              services.AddAzureBlob(AzureStorageConfiguration.CreateDefault());
-             services.AddDatadogMetrics(context.ApplicationName);
+             services.AddDatadogMetrics(configuration: DatadogConfiguration.UnixDomainSocket(context.ApplicationName));
              services.AddSingleton<IBlobStorageWriter>(sp => sp.GetRequiredService<IBlobStorageService>());
          })
     .Build()
