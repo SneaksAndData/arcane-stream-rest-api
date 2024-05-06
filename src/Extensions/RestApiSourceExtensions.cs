@@ -24,9 +24,11 @@ public static class RestApiSourceExtensions
         string sinkLocation,
         IStreamContext context,
         int rowsPerGroup,
-        TimeSpan groupingInterval)
+        TimeSpan groupingInterval,
+        bool isBackfilling)
     {
         var dimensions = source.GetDefaultTags().GetAsDictionary();
+        dimensions["mode"] = isBackfilling ? "backfill" : "streaming";
         var jsonSink = context.MultilineJsonSinkFromContext(source.GetParquetSchema(), blobStorageWriter, sinkLocation);
         return Source.FromGraph(source)
             .GroupedWithin(rowsPerGroup, groupingInterval)

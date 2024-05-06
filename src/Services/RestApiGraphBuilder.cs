@@ -38,21 +38,24 @@ public class RestApiGraphBuilder: IStreamGraphBuilder<IStreamContext>
                     configuration.SinkLocation,
                     context,
                     configuration.RowsPerGroup,
-                    configuration.GroupingInterval),
+                    configuration.GroupingInterval,
+                    configuration.IsBackfilling),
             RestApiPagedDynamicAuthStreamContext configuration => this.GetSource(configuration)
                 .BuildGraph(this.metricsService,
                     this.blobStorageWriter,
                     configuration.SinkLocation,
                     context,
                     configuration.RowsPerGroup,
-                    configuration.GroupingInterval),
+                    configuration.GroupingInterval,
+                    configuration.IsBackfilling),
             RestApiFixedAuthStreamContext configuration => this.GetSource(configuration)
                 .BuildGraph(this.metricsService,
                     this.blobStorageWriter,
                     configuration.SinkLocation,
                     context,
                     configuration.RowsPerGroup,
-                    configuration.GroupingInterval),
+                    configuration.GroupingInterval,
+                    configuration.IsBackfilling),
             _ => throw new ArgumentOutOfRangeException($"Unsupported stream context type: {context.GetType()}")
         };
     }
