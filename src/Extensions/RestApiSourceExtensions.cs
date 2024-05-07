@@ -28,7 +28,8 @@ public static class RestApiSourceExtensions
     {
         var dimensions = source.GetDefaultTags().GetAsDictionary();
         dimensions["mode"] = context.IsBackfilling ? "backfill" : "stream";
-        dimensions["stream_id"] = context.StreamId;
+        dimensions["streamId"] = context.StreamId;
+        dimensions["streamKind"] = context.StreamKind;
         var jsonSink = context.MultilineJsonSinkFromContext(source.GetParquetSchema(), blobStorageWriter, sinkLocation);
         return Source.FromGraph(source)
             .GroupedWithin(rowsPerGroup, groupingInterval)
