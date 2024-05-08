@@ -27,9 +27,9 @@ public static class RestApiSourceExtensions
         TimeSpan groupingInterval)
     {
         var dimensions = source.GetDefaultTags().GetAsDictionary();
-        dimensions["mode"] = context.IsBackfilling ? "backfill" : "stream";
-        dimensions["streamId"] = context.StreamId;
-        dimensions["streamKind"] = context.StreamKind;
+        dimensions["arcane.sneaksanddata.com/mode"] = context.IsBackfilling ? "backfill" : "stream";
+        dimensions["arcane.sneaksanddata.com/streamId"] = context.StreamId;
+        dimensions["arcane.sneaksanddata.com/kind"] = context.StreamKind;
         var jsonSink = context.MultilineJsonSinkFromContext(source.GetParquetSchema(), blobStorageWriter, sinkLocation);
         return Source.FromGraph(source)
             .GroupedWithin(rowsPerGroup, groupingInterval)
