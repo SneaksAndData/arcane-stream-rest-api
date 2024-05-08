@@ -123,7 +123,6 @@ public class RestApiGraphBuilder: IStreamGraphBuilder<IStreamContext>
             TimeSpan.FromSeconds(configuration.LookbackInterval),
             TimeSpan.FromSeconds(configuration.HttpTimeout),
             configuration.IsBackfilling,
-            configuration.StreamKind,
             rateLimitPolicy,
             RestApiExtensions.ParseOpenApiSchema(configuration.ApiSchemaEncoded),
             configuration.ResponsePropertyKeyChain);
@@ -150,7 +149,6 @@ public class RestApiGraphBuilder: IStreamGraphBuilder<IStreamContext>
             TimeSpan.FromSeconds(context.LookbackInterval),
             TimeSpan.FromSeconds(context.HttpTimeout),
             context.IsBackfilling,
-            context.StreamKind,
             rateLimitPolicy,
             RestApiExtensions.ParseOpenApiSchema(context.ApiSchemaEncoded),
             context.ResponsePropertyKeyChain);
