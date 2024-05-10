@@ -3,6 +3,7 @@ using System.Reflection;
 using Arcane.Framework.Contracts;
 using Arcane.Framework.Providers;
 using Arcane.Framework.Providers.Hosting;
+using Arcane.Stream.RestApi;
 using Arcane.Stream.RestApi.Models;
 using Arcane.Stream.RestApi.Models.Base;
 using Arcane.Stream.RestApi.Services;
@@ -21,7 +22,7 @@ Log.Logger = DefaultLoggingProvider.CreateBootstrapLogger(nameof(Arcane));
 int exitCode;
 try
 {
-    exitCode = await Host.CreateDefaultBuilder(args)
+    var host = Host.CreateDefaultBuilder(args)
         .AddDatadogLogging( (_, _, configuration) => configuration.WriteTo.Console())
         .ConfigureRequiredServices(services =>
         {
@@ -46,8 +47,8 @@ try
              services.AddDatadogMetrics(configuration: DatadogConfiguration.UnixDomainSocket(context.ApplicationName));
              services.AddSingleton<IBlobStorageWriter>(sp => sp.GetRequiredService<IBlobStorageService>());
          })
-    .Build()
-    .RunStream(Log.Logger);
+    .Build();
+    exitCode = await Hosting.RunStream(host, Log.Logger);
 }
 catch (Exception ex)
 {
@@ -60,4 +61,3 @@ finally
 }
 
 return exitCode;
-
