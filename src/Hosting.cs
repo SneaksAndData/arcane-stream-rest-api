@@ -50,7 +50,6 @@ public static class Hosting
         Log.Information( "Registered signal handler for SIGTERM");
         return PosixSignalRegistration.Create(PosixSignal.SIGTERM, context => 
         {
-            context.Cancel = true;
             Log.Information("Received a signal {signal}. Stopping the hosted stream and shutting down application", signal);
             streamRunnerService.StopStream();
         });
