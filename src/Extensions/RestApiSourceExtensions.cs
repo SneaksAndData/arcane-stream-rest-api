@@ -10,6 +10,7 @@ using Arcane.Framework.Services.Base;
 using Arcane.Framework.Sinks.Json;
 using Arcane.Framework.Sources.RestApi;
 using Parquet.Data;
+using Snd.Sdk.Helpers;
 using Snd.Sdk.Metrics.Base;
 using Snd.Sdk.Storage.Base;
 
@@ -26,7 +27,7 @@ public static class RestApiSourceExtensions
         int rowsPerGroup,
         TimeSpan groupingInterval)
     {
-        var dimensions = source.GetDefaultTags().GetAsDictionary();
+        var dimensions = source.GetDefaultTags().GetAsDictionary(context, context.StreamId);
         var jsonSink = context.MultilineJsonSinkFromContext(source.GetParquetSchema(), blobStorageWriter, sinkLocation);
         return Source.FromGraph(source)
             .GroupedWithin(rowsPerGroup, groupingInterval)
