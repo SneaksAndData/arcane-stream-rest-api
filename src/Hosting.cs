@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Akka.Util;
 using Arcane.Framework.Contracts;
@@ -16,7 +17,8 @@ public static class Hosting
     {
         var runner = host.Services.GetRequiredService<IStreamRunnerService>();
         var context = host.Services.GetRequiredService<IStreamContext>();
-        var lifetimeService = host.Services.GetRequiredService<IStreamLifetimeService>();
+        // using var lifetimeService = host.Services.GetRequiredService<IStreamLifetimeService>();
+        var reg = SetupSignalHandler(runner);
         var graphBuilder = host.Services.GetRequiredService<IStreamGraphBuilder<IStreamContext>>();
         try
         {
@@ -25,25 +27,30 @@ public static class Hosting
         }
         catch (Exception e)
         {
-                if (handleUnknownException is null)
+                if(handleUnknownException is null)
                 {
                     return FatalExit(e, logger);
                 }
-
                 return await handleUnknownException(e) switch
                 {
-                    { HasValue: true, Value: var exitCode } => exitCode,
+                    {HasValue: true, Value: var exitCode} => exitCode,
                     _ => FatalExit(e, logger),
                 };
-
-        }
-        finally
-        {
-            lifetimeService.Dispose();
         }
 
         logger.Information("Streaming job is completed successfully, exiting");
         return ExitCodes.SUCCESS;
+    }
+    
+    private static PosixSignalRegistration SetupSignalHandler(IStreamRunnerService streamRunnerService,
+        PosixSignal signal = PosixSignal.SIGTERM)
+    {
+        return PosixSignalRegistration.Create(PosixSignal.SIGTERM, context => 
+        {
+            context.Cancel = true;
+            Log.Information("Received a signal {signal}. Stopping the hosted stream and shutting down application", signal);
+            streamRunnerService.StopStream();
+        });
     }
 
     private static int FatalExit(Exception e, ILogger logger)
