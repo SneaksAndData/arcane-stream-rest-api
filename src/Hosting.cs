@@ -18,7 +18,7 @@ public static class Hosting
         var runner = host.Services.GetRequiredService<IStreamRunnerService>();
         var context = host.Services.GetRequiredService<IStreamContext>();
         // using var lifetimeService = host.Services.GetRequiredService<IStreamLifetimeService>();
-        var reg = SetupSignalHandler(runner);
+        using var reg = SetupSignalHandler(runner);
         var graphBuilder = host.Services.GetRequiredService<IStreamGraphBuilder<IStreamContext>>();
         try
         {
