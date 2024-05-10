@@ -49,7 +49,8 @@ public static class Hosting
         {
             context.Cancel = true;
             Log.Information("Received a signal {signal}. Stopping the hosted stream and shutting down application", signal);
-            streamRunnerService.StopStream();
+            // streamRunnerService.StopStream();
+            throw new Exception("SIGNAL");
         });
     }
 
