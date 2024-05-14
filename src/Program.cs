@@ -44,7 +44,7 @@ try
          {
              services.AddAzureBlob(AzureStorageConfiguration.CreateDefault());
              services.AddDatadogMetrics(configuration: DatadogConfiguration.UnixDomainSocket(context.ApplicationName));
-             services.AddSingleton<IBlobStorageWriter>(sp => sp.GetRequiredService<IBlobStorageService>());
+             services.AddAwsS3Writer(AmazonStorageConfiguration.CreateFromEnv());
          })
     .Build()
     .RunStream(Log.Logger);
