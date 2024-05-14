@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using Amazon.S3;
 using Arcane.Framework.Contracts;
 using Arcane.Framework.Providers;
 using Arcane.Framework.Providers.Hosting;
@@ -12,6 +13,7 @@ using Serilog;
 using Snd.Sdk.Logs.Providers;
 using Snd.Sdk.Metrics.Configurations;
 using Snd.Sdk.Metrics.Providers;
+using Snd.Sdk.Storage.Amazon;
 using Snd.Sdk.Storage.Base;
 using Snd.Sdk.Storage.Providers;
 using Snd.Sdk.Storage.Providers.Configurations;
@@ -44,7 +46,8 @@ try
          {
              services.AddAzureBlob(AzureStorageConfiguration.CreateDefault());
              services.AddDatadogMetrics(configuration: DatadogConfiguration.UnixDomainSocket(context.ApplicationName));
-             services.AddAwsS3Writer(AmazonStorageConfiguration.CreateFromEnv());
+             services.AddSingleton((IAmazonS3) new AmazonS3Client());
+            services.AddSingleton<IBlobStorageWriter, AmazonBlobStorageWriter>();
          })
     .Build()
     .RunStream(Log.Logger);
