@@ -3,4 +3,4 @@ name: arcane-stream-rest-api
 description: Rest API Stream for Arcane Operator
 type: application
 version: 0.0.0
-appVersion: "0.0.0"
+appVersion: 0.0.0
