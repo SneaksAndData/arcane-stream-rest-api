@@ -131,14 +131,14 @@ jobTemplateSettings:
   #  app.my-company.com/application: arcane
 
   # Extra environment variables to set in the the streaming job
-  extraEnv: {}
+  extraEnv: []
   # Example:
   #
   #  - name: ASPNETCORE_ENVIRONMENT
   #    value: production
 
   # Extra environment variables referencing a ConfigMap or Secret
-  extraEnvFrom: {}
+  extraEnvFrom: []
   # Example:
   #
   #  envFrom:
@@ -146,7 +146,7 @@ jobTemplateSettings:
   #        name: custom-api-access-token
 
   # Extra volumes to add to the streaming job
-  extraVolumes: {}
+  extraVolumes: []
   # Example:
   # 
   #  - name: data-volume
@@ -154,14 +154,14 @@ jobTemplateSettings:
   #      sizeLimit: 500Mi
 
   # Extra volumes to add to the streaming job
-  extraVolumeMounts: {}
+  extraVolumeMounts: []
   # Example:
   #
   #  - mountPath: /data
   #    name: data-volume
 
   # Resources constraints. By default, the operator does not specify any constraints to allow for easier deployment
-  resources: { }
+  resources: {}
   # Example:
   #
   #  requests:
@@ -172,10 +172,10 @@ jobTemplateSettings:
   #    memory: 1Gi
 
   # Node labels for pod assignment
-  tolerations: { }
+  tolerations: []
 
   # Node labels for pod assignment
-  affinity: { }
+  affinity: {}
 
   # Security context settings for the container
   securityContext:
