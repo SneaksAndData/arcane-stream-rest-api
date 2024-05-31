@@ -46,10 +46,12 @@ try
         })
         .ConfigureAdditionalServices((services, context) =>
         {
-            Log.Information($"Current app domain: {AppDomain.CurrentDomain.FriendlyName.ToUpperInvariant()}");
             services.AddAzureBlob(AzureStorageConfiguration.CreateDefault());
             services.AddDatadogMetrics(configuration: DatadogConfiguration.UnixDomainSocket(context.ApplicationName));
             
+            var varName = "AWS_ENDPOINT_URL";
+            Log.Information($"Current app domain: {AppDomain.CurrentDomain.FriendlyName.ToUpperInvariant()}");
+            Log.Information($"Current variable: {Environment.GetEnvironmentVariable(AppDomain.CurrentDomain.FriendlyName.ToUpperInvariant() + "__" + varName)}");
             var config = new AmazonStorageConfiguration()
             {
                 AccessKey = EnvironmentExtensions.GetAssemblyEnvironmentVariable("AWS_ACCESS_KEY_ID"),
