@@ -52,6 +52,7 @@ try
             var varName = "AWS_ENDPOINT_URL";
             Log.Information($"Current app domain: {AppDomain.CurrentDomain.FriendlyName.ToUpperInvariant()}");
             Log.Information($"Current variable: {Environment.GetEnvironmentVariable(AppDomain.CurrentDomain.FriendlyName.ToUpperInvariant() + "__" + varName)}");
+            Log.Information($"Current variable name: {AppDomain.CurrentDomain.FriendlyName.ToUpperInvariant() + "__" + varName}");
             var config = new AmazonStorageConfiguration()
             {
                 AccessKey = EnvironmentExtensions.GetAssemblyEnvironmentVariable("AWS_ACCESS_KEY_ID"),
