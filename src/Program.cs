@@ -48,15 +48,7 @@ try
         {
             services.AddAzureBlob(AzureStorageConfiguration.CreateDefault());
             services.AddDatadogMetrics(configuration: DatadogConfiguration.UnixDomainSocket(context.ApplicationName));
-            
-            // var config = new AmazonStorageConfiguration
-            // {
-            //     AccessKey = Environment.GetEnvironmentVariable("RESTAPI__AWS_ACCESS_KEY_ID"),
-            //     SecretKey = Environment.GetEnvironmentVariable("RESTAPI__AWS_SECRET_ACCESS_KEY"),
-            //     ServiceUrl = new Uri(Environment.GetEnvironmentVariable("RESTAPI__AWS_ENDPOINT_URL"))
-            // };
-            var config = AmazonStorageConfiguration.CreateFromEnv();
-            services.AddAwsS3Writer(config);
+            services.AddAwsS3Writer(AmazonStorageConfiguration.CreateFromEnv());
         })
         .Build()
         .RunStream(Log.Logger);
