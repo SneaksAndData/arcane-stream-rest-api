@@ -49,15 +49,11 @@ try
             services.AddAzureBlob(AzureStorageConfiguration.CreateDefault());
             services.AddDatadogMetrics(configuration: DatadogConfiguration.UnixDomainSocket(context.ApplicationName));
             
-            var varName = "AWS_ENDPOINT_URL";
-            Log.Information($"Current app domain: {AppDomain.CurrentDomain.FriendlyName.ToUpperInvariant()}");
-            Log.Information($"Current variable: {Environment.GetEnvironmentVariable(AppDomain.CurrentDomain.FriendlyName.ToUpperInvariant() + "__" + varName)}");
-            Log.Information($"Current variable name: {AppDomain.CurrentDomain.FriendlyName.ToUpperInvariant() + "__" + varName}");
-            var config = new AmazonStorageConfiguration()
+            var config = new AmazonStorageConfiguration
             {
-                AccessKey = EnvironmentExtensions.GetAssemblyEnvironmentVariable("AWS_ACCESS_KEY_ID"),
-                SecretKey = EnvironmentExtensions.GetAssemblyEnvironmentVariable("AWS_SECRET_ACCESS_KEY"),
-                ServiceUrl = new Uri(EnvironmentExtensions.GetAssemblyEnvironmentVariable("AWS_ENDPOINT_URL"))
+                AccessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID"),
+                SecretKey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY"),
+                ServiceUrl = new Uri(Environment.GetEnvironmentVariable("AWS_ENDPOINT_URL"))
             };
             services.AddAwsS3Writer(config);
         })
