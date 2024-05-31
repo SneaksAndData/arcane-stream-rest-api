@@ -10,6 +10,7 @@ using Arcane.Stream.RestApi.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Snd.Sdk.Hosting;
 using Snd.Sdk.Logs.Providers;
 using Snd.Sdk.Metrics.Configurations;
 using Snd.Sdk.Metrics.Providers;
@@ -48,7 +49,14 @@ try
             Log.Information($"Current app domain: {AppDomain.CurrentDomain.FriendlyName.ToUpperInvariant()}");
             services.AddAzureBlob(AzureStorageConfiguration.CreateDefault());
             services.AddDatadogMetrics(configuration: DatadogConfiguration.UnixDomainSocket(context.ApplicationName));
-            services.AddAwsS3Writer(AmazonStorageConfiguration.CreateFromEnv());
+            
+            var config = new AmazonStorageConfiguration()
+            {
+                AccessKey = EnvironmentExtensions.GetAssemblyEnvironmentVariable("AWS_ACCESS_KEY_ID"),
+                SecretKey = EnvironmentExtensions.GetAssemblyEnvironmentVariable("AWS_SECRET_ACCESS_KEY"),
+                ServiceUrl = new Uri(EnvironmentExtensions.GetAssemblyEnvironmentVariable("AWS_ENDPOINT_URL"))
+            };
+            services.AddAwsS3Writer(config);
         })
         .Build()
         .RunStream(Log.Logger);
