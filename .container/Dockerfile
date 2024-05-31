@@ -44,4 +44,4 @@ COPY --from=build-env /app/out .
 
 USER app
 
-ENTRYPOINT "dotnet" "Arcane.Stream.RestApi.dll"
+ENTRYPOINT ["dotnet", "Arcane.Stream.RestApi.dll"]

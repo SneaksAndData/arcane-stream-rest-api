@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using Amazon.S3;
 using Arcane.Framework.Contracts;
 using Arcane.Framework.Providers;
 using Arcane.Framework.Providers.Hosting;
@@ -9,9 +10,11 @@ using Arcane.Stream.RestApi.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Snd.Sdk.Hosting;
 using Snd.Sdk.Logs.Providers;
 using Snd.Sdk.Metrics.Configurations;
 using Snd.Sdk.Metrics.Providers;
+using Snd.Sdk.Storage.Amazon;
 using Snd.Sdk.Storage.Base;
 using Snd.Sdk.Storage.Providers;
 using Snd.Sdk.Storage.Providers.Configurations;
@@ -22,7 +25,7 @@ int exitCode;
 try
 {
     exitCode = await Host.CreateDefaultBuilder(args)
-        .AddDatadogLogging( (_, _, configuration) => configuration.WriteTo.Console())
+        .AddDatadogLogging((_, _, configuration) => configuration.WriteTo.Console())
         .ConfigureRequiredServices(services =>
         {
             return services.AddStreamGraphBuilder<RestApiGraphBuilder>(context =>
@@ -37,17 +40,18 @@ try
                 {
                     throw new ArgumentException($"Unknown stream kind {typeFullName}. Cannot load stream context.");
                 }
+
                 return ((RestApiStreamContextBase)StreamContext.ProvideFromEnvironment(targetType)).LoadSecrets();
             });
         })
         .ConfigureAdditionalServices((services, context) =>
-         {
-             services.AddAzureBlob(AzureStorageConfiguration.CreateDefault());
-             services.AddDatadogMetrics(configuration: DatadogConfiguration.UnixDomainSocket(context.ApplicationName));
-             services.AddSingleton<IBlobStorageWriter>(sp => sp.GetRequiredService<IBlobStorageService>());
-         })
-    .Build()
-    .RunStream(Log.Logger);
+        {
+            services.AddAzureBlob(AzureStorageConfiguration.CreateDefault());
+            services.AddDatadogMetrics(configuration: DatadogConfiguration.UnixDomainSocket(context.ApplicationName));
+            services.AddAwsS3Writer(AmazonStorageConfiguration.CreateFromEnv());
+        })
+        .Build()
+        .RunStream(Log.Logger);
 }
 catch (Exception ex)
 {
@@ -60,4 +64,3 @@ finally
 }
 
 return exitCode;
-
