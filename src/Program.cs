@@ -51,9 +51,9 @@ try
             
             var config = new AmazonStorageConfiguration
             {
-                AccessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID"),
-                SecretKey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY"),
-                ServiceUrl = new Uri(Environment.GetEnvironmentVariable("AWS_ENDPOINT_URL"))
+                AccessKey = Environment.GetEnvironmentVariable("RESTAPI__AWS_ACCESS_KEY_ID"),
+                SecretKey = Environment.GetEnvironmentVariable("RESTAPI__AWS_SECRET_ACCESS_KEY"),
+                ServiceUrl = new Uri(Environment.GetEnvironmentVariable("RESTAPI__AWS_ENDPOINT_URL"))
             };
             services.AddAwsS3Writer(config);
         })
