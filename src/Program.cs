@@ -45,6 +45,7 @@ try
         })
         .ConfigureAdditionalServices((services, context) =>
         {
+            Log.Information($"Current app domain: {AppDomain.CurrentDomain.FriendlyName.ToUpperInvariant()}");
             services.AddAzureBlob(AzureStorageConfiguration.CreateDefault());
             services.AddDatadogMetrics(configuration: DatadogConfiguration.UnixDomainSocket(context.ApplicationName));
             services.AddAwsS3Writer(AmazonStorageConfiguration.CreateFromEnv());
