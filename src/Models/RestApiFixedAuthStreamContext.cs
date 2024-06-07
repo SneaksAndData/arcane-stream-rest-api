@@ -33,6 +33,11 @@ public class RestApiFixedAuthStreamContext : RestApiFixedAuthBase
     /// </summary>
     [JsonConverter(typeof(UnixTimeConverter))]
     public DateTimeOffset BackFillStartDate { get; init; }
+    
+    /// <summary>
+    /// Properties to traverse before [{..}, {..}, ..] structure is reached in the response.
+    /// </summary>
+    public string[] ResponsePropertyKeyChain { get; init; }
 
     /// <summary>
     /// Number of JsonElements per single json file.

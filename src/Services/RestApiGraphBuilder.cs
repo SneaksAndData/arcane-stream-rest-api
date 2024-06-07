@@ -80,7 +80,8 @@ public class RestApiGraphBuilder: IStreamGraphBuilder<IStreamContext>
             context.IsBackfilling,
             context.StreamKind,
             rateLimitPolicy,
-            RestApiExtensions.ParseOpenApiSchema(context.ApiSchemaEncoded));
+            RestApiExtensions.ParseOpenApiSchema(context.ApiSchemaEncoded),
+            context.ResponsePropertyKeyChain);
     }
 
     private RestApiSource GetSource(RestApiPagedDynamicAuthStreamContext configuration)
