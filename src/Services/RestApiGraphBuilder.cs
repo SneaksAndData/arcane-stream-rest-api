@@ -78,9 +78,9 @@ public class RestApiGraphBuilder: IStreamGraphBuilder<IStreamContext>
             TimeSpan.FromSeconds(context.LookbackInterval),
             TimeSpan.FromSeconds(context.HttpTimeout),
             context.IsBackfilling,
-            context.StreamKind,
             rateLimitPolicy,
-            RestApiExtensions.ParseOpenApiSchema(context.ApiSchemaEncoded));
+            context.ApiSchemaEncoded.ParseOpenApiSchema(),
+            context.ResponsePropertyKeyChain);
     }
 
     private RestApiSource GetSource(RestApiPagedDynamicAuthStreamContext configuration)
@@ -124,7 +124,7 @@ public class RestApiGraphBuilder: IStreamGraphBuilder<IStreamContext>
             TimeSpan.FromSeconds(configuration.HttpTimeout),
             configuration.IsBackfilling,
             rateLimitPolicy,
-            RestApiExtensions.ParseOpenApiSchema(configuration.ApiSchemaEncoded),
+            configuration.ApiSchemaEncoded.ParseOpenApiSchema(),
             configuration.ResponsePropertyKeyChain);
     }
 
@@ -150,7 +150,7 @@ public class RestApiGraphBuilder: IStreamGraphBuilder<IStreamContext>
             TimeSpan.FromSeconds(context.HttpTimeout),
             context.IsBackfilling,
             rateLimitPolicy,
-            RestApiExtensions.ParseOpenApiSchema(context.ApiSchemaEncoded),
+            context.ApiSchemaEncoded.ParseOpenApiSchema(),
             context.ResponsePropertyKeyChain);
     }
 }
