@@ -2,16 +2,16 @@
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  name: api-pdas.streaming.sneaksanddata.com
+  name: api-das.streaming.sneaksanddata.com
 spec:
   group: streaming.sneaksanddata.com
   scope: Namespaced
   names:
-    plural: api-pdas
-    singular: api-pda
-    kind: RestApiPagedDynamicAuth
+    plural: api-das
+    singular: api-da
+    kind: RestApiDynamicAuth
     shortNames:
-      - api-pdas
+      - api-das
   versions:
     - name: v1beta1
       served: true
@@ -40,7 +40,7 @@ spec:
               properties:
                 credentialSecretRef:
                   description: |
-                    Name of the secret containing the REST API credentials.
+                    Name of the secret containing the connection string.
                     Must have: 'ARCANE__AUTHURL' and 'ARCANE__TOKENPROPERTYNAME'.
                     Must have: 'ARCANE__EXPIRATIONPERIODPROPERTYNAME' or 'ARCANE_EXPIRATIONPERIOD'.
                     Optional: 'ARCANE_TOKENREQUESTBODY' and 'ARCANE_TOKENHTTPMETHOD'.
@@ -88,7 +88,6 @@ spec:
                       fieldType:
                         type: string
                         enum:
-                          - RESPONSE_PAGE
                           - FILTER_DATE_FROM
                           - FILTER_DATE_BETWEEN_FROM
                           - FILTER_DATE_BETWEEN_TO
@@ -113,27 +112,6 @@ spec:
                   type: string
                   default: "GET"
                   description: Http method to use when requesting data.
-                pageResolverConfiguration:
-                  type: object
-                  properties:
-                    resolverType:
-                      type: string
-                      enum:
-                        - COUNTER
-                        - OFFSET
-                        - TOKEN
-                    resolverPropertyKeyChain:
-                      type: array
-                      default: []
-                      description: Name of a query response property chain that stores page pointer value to be used by this resolver.
-                      items:
-                        type: string
-                    responseSize:
-                      type: integer
-                      nullable: true
-                    startOffset:
-                      type: integer
-                      nullable: true
                 backFillStartDate:
                   type: integer
                   description: Start date for the backfill.
@@ -175,7 +153,7 @@ spec:
                 internalRateLimitInterval:
                   type: integer
                   minimum: 1
-                  maximum: 300
+                  maximum: 86400
                   default: 60
                   description: Internal rate limit, evaluation interval
                 apiSchemaEncoded:

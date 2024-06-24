@@ -58,6 +58,20 @@ rbac:
       create: true
       nameOverride: ""
       
+    # Allows the service account to update custom resources
+    restApiDynamicAuthViewer:
+      additionalLabels: {}
+      additionalAnnotations: {}
+      create: true
+      nameOverride: ""
+      
+    # Allows the service account to update custom resources
+    restApiDynamicAuthEditor:
+      additionalLabels: {}
+      additionalAnnotations: {}
+      create: true
+      nameOverride: ""
+      
     # Allows the service account to list and view custom resources
     restApiPagedDynamicAuthViewer:
       additionalLabels: {}

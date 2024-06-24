@@ -121,6 +121,28 @@ Generate the CR editor cluster role name
 {{/*
 Generate the CR viewer cluster role name
 */}}
+{{- define "app.clusteRole.restApiDynamicAuthViewer" -}}
+{{- if .Values.rbac.clusterRole.restApiFixedAuthViewer.nameOverride }}
+{{- .Values.rbac.clusterRole.restApiFixedAuthViewer.nameOverride }}
+{{- else }}
+{{- printf "%s-rest-api-da-viewer" (include "app.fullname" .) }}
+{{- end }}
+{{- end }}
+
+{{/*
+Generate the CR editor cluster role name
+*/}}
+{{- define "app.clusteRole.restApiDynamicAuthEditor" -}}
+{{- if .Values.rbac.clusterRole.restApiFixedAuthEditor.nameOverride }}
+{{- .Values.rbac.clusterRole.restApiFixedAuthEditor.nameOverride }}
+{{- else }}
+{{- printf "%s-rest-api-da-editor" (include "app.fullname" .) }}
+{{- end }}
+{{- end }}
+
+{{/*
+Generate the CR viewer cluster role name
+*/}}
 {{- define "app.clusteRole.restApiPagedDynamicAuthViewer" -}}
 {{- if .Values.rbac.clusterRole.restApiFixedAuthViewer.nameOverride }}
 {{- .Values.rbac.clusterRole.restApiFixedAuthViewer.nameOverride }}
