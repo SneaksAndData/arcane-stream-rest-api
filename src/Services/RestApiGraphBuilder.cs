@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Akka.Streams;
 using Akka.Streams.Dsl;
@@ -17,17 +19,17 @@ using Snd.Sdk.Storage.Base;
 
 namespace Arcane.Stream.RestApi.Services;
 
-public class RestApiGraphBuilder: IStreamGraphBuilder<IStreamContext>
+public class RestApiGraphBuilder : IStreamGraphBuilder<IStreamContext>
 {
     private readonly IBlobStorageWriter blobStorageWriter;
     private readonly MetricsService metricsService;
 
     public RestApiGraphBuilder(IBlobStorageWriter blobStorageWriter, MetricsService metricsService)
     {
-       this.blobStorageWriter = blobStorageWriter; 
-       this.metricsService = metricsService;
+        this.blobStorageWriter = blobStorageWriter;
+        this.metricsService = metricsService;
     }
-    
+
     public IRunnableGraph<(UniqueKillSwitch, Task)> BuildGraph(IStreamContext context)
     {
         return context switch
@@ -53,6 +55,13 @@ public class RestApiGraphBuilder: IStreamGraphBuilder<IStreamContext>
                     context,
                     configuration.RowsPerGroup,
                     configuration.GroupingInterval),
+            RestApiDynamicAuthStreamContext configuration => this.GetSource(configuration)
+                .BuildGraph(this.metricsService,
+                    this.blobStorageWriter,
+                    configuration.SinkLocation,
+                    context,
+                    configuration.RowsPerGroup,
+                    configuration.GroupingInterval),
             _ => throw new ArgumentOutOfRangeException($"Unsupported stream context type: {context.GetType()}")
         };
     }
@@ -65,8 +74,62 @@ public class RestApiGraphBuilder: IStreamGraphBuilder<IStreamContext>
             context.BackFillStartDate,
             new HttpMethod(context.HttpMethod),
             context.BodyTemplate);
-        var authMessage = 
+        var authMessage =
             new FixedHeaderAuthenticatedMessageProvider(context.AuthHeaders);
+        var rateLimitPolicy = Policy.RateLimitAsync(context.InternalRateLimitCount,
+            TimeSpan.FromSeconds(context.InternalRateLimitInterval));
+
+        return RestApiSource.Create(
+            uriProvider: queryProvider,
+            headerAuthenticatedMessageProvider: authMessage,
+            context.IsBackfilling,
+            TimeSpan.FromSeconds(context.ChangeCaptureInterval),
+            TimeSpan.FromSeconds(context.LookbackInterval),
+            TimeSpan.FromSeconds(context.HttpTimeout),
+            context.IsBackfilling,
+            rateLimitPolicy,
+            context.ApiSchemaEncoded.ParseOpenApiSchema(),
+            context.ResponsePropertyKeyChain);
+    }
+
+    private RestApiSource GetSource(RestApiDynamicAuthStreamContext context)
+    {
+        var queryProvider = new SimpleUriProvider(
+            context.UrlTemplate,
+            context.TemplatedFields.ToList(),
+            context.BackFillStartDate,
+            new HttpMethod(context.HttpMethod),
+            context.BodyTemplate);
+        var authMessage = (string.IsNullOrEmpty(context.ExpirationPeriodPropertyName), context.ExpirationPeriod.HasValue) switch
+            {
+                (false, _) => new DynamicBearerAuthenticatedMessageProvider(
+                    tokenSource: context.AuthUrl,
+                    tokenPropertyName: context.TokenPropertyName,
+                    expirationPeriodPropertyName: context.ExpirationPeriodPropertyName,
+                    requestMethod: new HttpMethod(context.TokenHttpMethod),
+                    tokenRequestBody: context.TokenRequestBody,
+                    tokenRequestContentType: context.TokenRequestContentType,
+                    additionalHeaders: string.IsNullOrEmpty(context.TokenRequestAdditionalHeaders)
+                        ? null
+                        : JsonSerializer.Deserialize<Dictionary<string, string>>(context.TokenRequestAdditionalHeaders),
+                    authHeaderName: context.TokenRequestHeaderName,
+                    authScheme: context.TokenRequestTokenScheme),
+                (true, true) => new DynamicBearerAuthenticatedMessageProvider(
+                    tokenSource: context.AuthUrl,
+                    tokenPropertyName: context.TokenPropertyName,
+                    // ReSharper disable once PossibleInvalidOperationException
+                    expirationPeriod: context.ExpirationPeriod.Value,
+                    requestMethod: new HttpMethod(context.TokenHttpMethod),
+                    tokenRequestBody: context.TokenRequestBody,
+                    tokenRequestContentType: context.TokenRequestContentType,
+                    additionalHeaders: string.IsNullOrEmpty(context.TokenRequestAdditionalHeaders)
+                        ? null
+                        : JsonSerializer.Deserialize<Dictionary<string, string>>(context.TokenRequestAdditionalHeaders),
+                    authHeaderName: context.TokenRequestHeaderName,
+                    authScheme: context.TokenRequestTokenScheme),
+                _ => throw new ArgumentOutOfRangeException(
+                    $"Unsupported combination of {nameof(RestApiPagedDynamicAuthStreamContext.ExpirationPeriodPropertyName)} and {nameof(RestApiPagedDynamicAuthStreamContext.ExpirationPeriod)}")
+            };
         var rateLimitPolicy = Policy.RateLimitAsync(context.InternalRateLimitCount,
             TimeSpan.FromSeconds(context.InternalRateLimitInterval));
 
@@ -85,7 +148,7 @@ public class RestApiGraphBuilder: IStreamGraphBuilder<IStreamContext>
 
     private RestApiSource GetSource(RestApiPagedDynamicAuthStreamContext configuration)
     {
-                var authMessage = (string.IsNullOrEmpty(configuration.ExpirationPeriodPropertyName),
+        var authMessage = (string.IsNullOrEmpty(configuration.ExpirationPeriodPropertyName),
                 configuration.ExpirationPeriod.HasValue) switch
             {
                 (false, _) => new DynamicBearerAuthenticatedMessageProvider(
@@ -104,14 +167,14 @@ public class RestApiGraphBuilder: IStreamGraphBuilder<IStreamContext>
                 _ => throw new ArgumentOutOfRangeException(
                     $"Unsupported combination of {nameof(RestApiPagedDynamicAuthStreamContext.ExpirationPeriodPropertyName)} and {nameof(RestApiPagedDynamicAuthStreamContext.ExpirationPeriod)}")
             };
-        
+
         var queryProvider = new PagedUriProvider(
             configuration.UrlTemplate,
             configuration.TemplatedFields.ToList(),
             configuration.BackFillStartDate,
             new HttpMethod(configuration.HttpMethod),
             configuration.BodyTemplate).WithPageResolver(configuration.PageResolverConfiguration);
-        
+
         var rateLimitPolicy = Policy.RateLimitAsync(configuration.InternalRateLimitCount,
             TimeSpan.FromSeconds(configuration.InternalRateLimitInterval));
 
@@ -137,7 +200,7 @@ public class RestApiGraphBuilder: IStreamGraphBuilder<IStreamContext>
             context.BackFillStartDate,
             new HttpMethod(context.HttpMethod),
             context.BodyTemplate).WithPageResolver(context.PageResolverConfiguration);
-        
+
         var rateLimitPolicy = Policy.RateLimitAsync(context.InternalRateLimitCount,
             TimeSpan.FromSeconds(context.InternalRateLimitInterval));
 
