@@ -15,6 +15,6 @@ spec:
   apiGroupRef: streaming.sneaksanddata.com
   kindRef: RestApiDynamicAuth
   apiVersion: v1beta1
-  pluralName: api-fas
+  pluralName: api-das
   secretRefs:
     - credentialSecretRef
