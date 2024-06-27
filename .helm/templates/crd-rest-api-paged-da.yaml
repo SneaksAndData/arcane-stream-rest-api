@@ -175,7 +175,7 @@ spec:
                 internalRateLimitInterval:
                   type: integer
                   minimum: 1
-                  maximum: 300
+                  maximum: 86400
                   default: 60
                   description: Internal rate limit, evaluation interval
                 apiSchemaEncoded:
