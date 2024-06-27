@@ -63,9 +63,9 @@ spec:
                     apiGroup: streaming.sneaksanddata.com
                     kind: StreamingJobTemplate
                     name: standard-job
-                reloadingJobTemplateRef:
+                backfillJobTemplateRef:
                   description: |
-                    Name of the job template to be used for the streaming job if stream is running in reloading mode.
+                    Name of the job template to be used for the streaming job if stream is running in backfill mode.
                   type: object
                   properties:
                     name:
@@ -175,7 +175,7 @@ spec:
                 internalRateLimitInterval:
                   type: integer
                   minimum: 1
-                  maximum: 300
+                  maximum: 86400
                   default: 60
                   description: Internal rate limit, evaluation interval
                 apiSchemaEncoded:

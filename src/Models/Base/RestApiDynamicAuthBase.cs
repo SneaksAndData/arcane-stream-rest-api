@@ -1,3 +1,5 @@
+using System;
+
 namespace Arcane.Stream.RestApi.Models.Base;
 
 public class RestApiDynamicAuthBase : RestApiStreamContextBase
@@ -16,6 +18,11 @@ public class RestApiDynamicAuthBase : RestApiStreamContextBase
     /// Name of the response property that contains access token expiration (duration) period.
     /// </summary>
     public string ExpirationPeriodPropertyName { get; private set; }
+    
+    /// <summary>
+    /// Optional fixed expiration period for the token.
+    /// </summary>
+    public TimeSpan? ExpirationPeriod { get; init; }
 
     /// <summary>
     /// Optional body that contains information required to issue a token.

@@ -1,0 +1,20 @@
+apiVersion: streaming.sneaksanddata.com/v1beta1
+kind: StreamClass
+metadata:
+  name: {{ template "app.name" . }}-da
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "streamclass.labels" $ | nindent 4 }}
+  {{- if .Values.additionalAnnotations }}
+  annotations:
+    {{- with .Values.additionalAnnotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  apiGroupRef: streaming.sneaksanddata.com
+  kindRef: RestApiDynamicAuth
+  apiVersion: v1beta1
+  pluralName: api-das
+  secretRefs:
+    - credentialSecretRef
