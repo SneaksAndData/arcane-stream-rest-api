@@ -10,16 +10,17 @@ env:
   PROJECT_NAME: Arcane.Stream.RestApi
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+    
+permissions:
+  pull-requests: write
+  contents: read
+  id-token: write
   
 jobs:
   validate_commit:
     name: Validate commit
     runs-on: ubuntu-latest
     if: ${{ github.ref != 'refs/heads/main' }}
-    permissions:
-      pull-requests: write
-      contents: read
-      id-token: write
     steps:
       - uses: actions/checkout@v4
         
