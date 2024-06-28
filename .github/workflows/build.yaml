@@ -99,6 +99,38 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/arm64,linux/amd64
           
+      - name: Import Secrets (PROD)
+        uses: hashicorp/vault-action@v2.7.3
+        if: ${{ github.ref == 'refs/heads/main' }}
+        with:
+          url: https://hashicorp-vault.awsp.sneaksanddata.com/
+          role: github
+          method: jwt
+          secrets: |
+            /secret/data/common/package-publishing/aws-ecr/production/container-user access_key | ACCESS_KEY ;
+            /secret/data/common/package-publishing/aws-ecr/production/container-user access_key_id | ACCESS_KEY_ID ;
+        id: aws_secrets
+
+      - name: Configure AWS Credentials (PROD)
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: aws-actions/configure-aws-credentials@v4.0.0
+        with:
+          aws-access-key-id: ${{ env.ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.ACCESS_KEY }}
+          region: us-east-1
+
+      - name: Login to Amazon ECR Public
+        id: login-ecr-public
+        uses: aws-actions/amazon-ecr-login@v2
+        with:
+          registry-type: public
+          
+      - name: Push image
+        uses: akhilerm/tag-push-action@v2.1.0
+        with:
+          src: ${{ steps.meta.outputs.tags }}
+          dst: public.ecr.aws/s0t1h2z6/arcane/arcane-stream-rest-api
+          
       - name: Build and Push Chart
         uses: SneaksAndData/github-actions/build_helm_chart@v0.1.8
         with:
