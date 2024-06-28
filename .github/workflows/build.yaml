@@ -14,7 +14,7 @@ env:
 permissions:
   pull-requests: write
   contents: read
-  id-token: write
+  id-token: read
   
 jobs:
   validate_commit:
@@ -120,7 +120,6 @@ jobs:
           secrets: |
             /secret/data/common/package-publishing/aws-ecr/production/container-user access_key | ACCESS_KEY ;
             /secret/data/common/package-publishing/aws-ecr/production/container-user access_key_id | ACCESS_KEY_ID ;
-        id: aws_secrets
 
       - name: Configure AWS Credentials (PROD)
         uses: aws-actions/configure-aws-credentials@v4.0.0
