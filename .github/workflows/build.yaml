@@ -117,8 +117,8 @@ jobs:
           role: github
           method: jwt
           secrets: |
-            /secret/data/common/package-publishing/aws-ecr/production/container-user access_key | ACCESS_KEY ;
-            /secret/data/common/package-publishing/aws-ecr/production/container-user access_key_id | ACCESS_KEY_ID ;
+            /secret/data/common/package-publishing/aws-ecr-public/production/container-user-public access_key | ACCESS_KEY ;
+            /secret/data/common/package-publishing/aws-ecr-public/production/container-user-public access_key_id | ACCESS_KEY_ID ;
         id: aws_secrets
 
       - name: Configure AWS Credentials (PROD)
