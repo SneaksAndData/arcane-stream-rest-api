@@ -110,7 +110,7 @@ jobs:
           container_registry_address: ghcr.io/sneaksanddata/
           
       # AWS ECR Public Registry related steps
-      - name: Import Secrets (PROD)
+      - name: Import AWS Secrets
         uses: hashicorp/vault-action@v2.7.3
         if: ${{ startsWith(github.ref, 'refs/tags') }}
         with:
@@ -122,7 +122,7 @@ jobs:
             /secret/data/common/package-publishing/aws-ecr-public/production/container-user-public access_key_id | ACCESS_KEY_ID ;
         id: aws_secrets
 
-      - name: Configure AWS Credentials (PROD)
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4.0.0
         if: ${{ startsWith(github.ref, 'refs/tags') }}
         with:
