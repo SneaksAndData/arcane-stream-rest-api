@@ -112,6 +112,7 @@ jobs:
       # AWS ECR Public Registry related steps
       - name: Import Secrets (PROD)
         uses: hashicorp/vault-action@v2.7.3
+        if: ${{ startsWith(github.ref, 'refs/tags') }}
         with:
           url: https://hashicorp-vault.awsp.sneaksanddata.com/
           role: github
@@ -123,18 +124,22 @@ jobs:
 
       - name: Configure AWS Credentials (PROD)
         uses: aws-actions/configure-aws-credentials@v4.0.0
+        if: ${{ startsWith(github.ref, 'refs/tags') }}
         with:
           aws-access-key-id: ${{ env.ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ env.ACCESS_KEY }}
           aws-region: us-east-1
 
       - name: Login to Amazon ECR Public
+        if: ${{ startsWith(github.ref, 'refs/tags') }}
         uses: aws-actions/amazon-ecr-login@v2
         with:
           registry-type: public
           
       - name: Push image to ECR Public registry
+        if: ${{ startsWith(github.ref, 'refs/tags') }}
         uses: akhilerm/tag-push-action@v2.1.0
         with:
           src: ${{ steps.meta.outputs.tags }}
           dst: public.ecr.aws/s0t1h2z6/arcane/arcane-stream-rest-api:${{ steps.meta.outputs.version }}
+      # END AWS ECR Registry related steps
