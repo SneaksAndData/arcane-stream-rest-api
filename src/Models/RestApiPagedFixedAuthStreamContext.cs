@@ -57,11 +57,6 @@ public class RestApiPagedFixedAuthStreamContext : RestApiFixedAuthBase
     public TimeSpan GroupingInterval { get; init; }
 
     /// <summary>
-    /// Data location for the sink.
-    /// </summary>
-    public string SinkLocation { get; set; }
-
-    /// <summary>
     /// Number of seconds to look back when determining first set of changes to extract.
     /// </summary>
     public int LookbackInterval { get; init; }

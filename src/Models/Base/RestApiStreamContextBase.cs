@@ -18,6 +18,11 @@ public abstract class RestApiStreamContextBase: IStreamContext, IStreamContextWr
     /// <inheritdoc cref="IStreamContext.IsBackfilling"/>>
     public bool IsBackfilling { get; private set; }
 
+    /// <summary>
+    /// Data location for the sink.
+    /// </summary>
+    public string SinkLocation { get; init; }
+
     /// <inheritdoc cref="IStreamContextWriter.SetStreamId"/>>
     public void SetStreamId(string streamId)
     {

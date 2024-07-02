@@ -1,24 +1,18 @@
 ﻿using System;
 using System.Reflection;
-using Amazon.S3;
 using Arcane.Framework.Contracts;
 using Arcane.Framework.Providers;
 using Arcane.Framework.Providers.Hosting;
-using Arcane.Framework.Services.Base;
 using Arcane.Stream.RestApi.Extensions;
 using Arcane.Stream.RestApi.Models;
 using Arcane.Stream.RestApi.Models.Base;
 using Arcane.Stream.RestApi.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Serilog;
 using Snd.Sdk.Logs.Providers;
 using Snd.Sdk.Metrics.Configurations;
 using Snd.Sdk.Metrics.Providers;
-using Snd.Sdk.Storage.Amazon;
-using Snd.Sdk.Storage.Base;
-using Snd.Sdk.Storage.Models.BlobPath;
 using Snd.Sdk.Storage.Providers;
 using Snd.Sdk.Storage.Providers.Configurations;
 
