@@ -12,7 +12,6 @@ on:
         default: "current"
 
 env:
-  PROJECT_NAME: Arcane.Operator
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
