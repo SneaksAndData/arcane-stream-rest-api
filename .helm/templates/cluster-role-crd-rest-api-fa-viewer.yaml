@@ -7,10 +7,10 @@ metadata:
     rbac.authorization.k8s.io/aggregate-to-view: "true"
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
     {{- include "app.labels" $ | nindent 4 }}
-    {{- with .Values.rbac.clusterRole.restApiFixedAuthEditor.additionalLabels }}
+    {{- with .Values.rbac.clusterRole.restApiFixedAuthViewer.additionalLabels }}
       {{- toYaml . | nindent 4 }}
     {{- end }}
-  {{- with .Values.rbac.clusterRole.restApiFixedAuthEditor.additionalAnnotations }}
+  {{- with .Values.rbac.clusterRole.restApiFixedAuthViewer.additionalAnnotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
