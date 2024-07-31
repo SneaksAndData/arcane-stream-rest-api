@@ -22,7 +22,7 @@ public class RestApiDynamicAuthBase : RestApiStreamContextBase
     /// <summary>
     /// Optional fixed expiration period for the token.
     /// </summary>
-    public TimeSpan? ExpirationPeriod { get; init; }
+    public TimeSpan? ExpirationPeriod { get; private set; }
 
     /// <summary>
     /// Optional body that contains information required to issue a token.
@@ -47,7 +47,7 @@ public class RestApiDynamicAuthBase : RestApiStreamContextBase
     /// <summary>
     /// Header to supply the token to. Defaults to `Authorization` if not provided.
     /// </summary>    
-    public string TokenRequestHeaderName { get; init; }
+    public string TokenRequestHeaderName { get; private set; }
 
     /// <summary>
     /// Token scheme to provide in the header before the token value. Defaults to `Bearer` if not provided and TokenRequestHeaderName is `Authorization`.
@@ -59,12 +59,14 @@ public class RestApiDynamicAuthBase : RestApiStreamContextBase
     {
         this.AuthUrl = this.GetSecretFromEnvironment(nameof(this.AuthUrl));
         this.ExpirationPeriodPropertyName = this.GetSecretFromEnvironment(nameof(this.ExpirationPeriodPropertyName));
+        this.ExpirationPeriod = this.GetNullableTimeSpanObjectFromEnvironment(nameof(this.ExpirationPeriod));
         this.TokenHttpMethod = this.GetSecretFromEnvironment(nameof(this.TokenHttpMethod));
         this.TokenPropertyName =  this.GetSecretFromEnvironment(nameof(this.TokenPropertyName));
         this.TokenRequestAdditionalHeaders = this.GetSecretFromEnvironment(nameof(this.TokenRequestAdditionalHeaders));
         this.TokenRequestBody = this.GetSecretFromEnvironment(nameof(this.TokenRequestBody));
         this.TokenRequestContentType = this.GetSecretFromEnvironment(nameof(this.TokenRequestContentType));
         this.TokenRequestTokenScheme = this.GetSecretFromEnvironment(nameof(this.TokenRequestTokenScheme));
+        this.TokenRequestHeaderName = this.GetSecretFromEnvironment(nameof(this.TokenRequestHeaderName));
         return this;
     }
 }
