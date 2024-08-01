@@ -79,7 +79,6 @@ public class RestApiPagedDynamicAuthStreamContext : RestApiDynamicAuthBase
     /// <summary>
     /// How long to wait before polling for next result set.
     /// </summary>
-    [JsonConverter(typeof(SecondsToTimeSpanConverter))]
     [JsonPropertyName("changeCaptureIntervalSeconds")]
     public int ChangeCaptureInterval { get; init; }
     
