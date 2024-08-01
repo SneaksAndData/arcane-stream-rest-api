@@ -9,11 +9,6 @@ namespace Arcane.Stream.RestApi.Models;
 public class RestApiPagedDynamicAuthStreamContext : RestApiDynamicAuthBase
 {
     /// <summary>
-    /// Optional fixed expiration period for the token.
-    /// </summary>
-    public TimeSpan? ExpirationPeriod { get; init; }
-
-    /// <summary>
     /// Configuration for the page resolver.
     /// </summary>
     public PageResolverConfiguration PageResolverConfiguration { get; init; }
