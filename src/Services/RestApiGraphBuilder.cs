@@ -156,14 +156,18 @@ public class RestApiGraphBuilder : IStreamGraphBuilder<IStreamContext>
                     tokenPropertyName: configuration.TokenPropertyName,
                     expirationPeriodPropertyName: configuration.ExpirationPeriodPropertyName,
                     requestMethod: new HttpMethod(configuration.TokenHttpMethod),
-                    tokenRequestBody: configuration.TokenRequestBody),
+                    tokenRequestBody: configuration.TokenRequestBody,
+                    tokenRequestContentType: configuration.TokenRequestContentType,
+                    authScheme: configuration.TokenRequestTokenScheme),
                 (true, true) => new DynamicBearerAuthenticatedMessageProvider(
                     tokenSource: configuration.AuthUrl,
                     tokenPropertyName: configuration.TokenPropertyName,
                     // ReSharper disable once PossibleInvalidOperationException
                     expirationPeriod: configuration.ExpirationPeriod.Value,
                     requestMethod: new HttpMethod(configuration.TokenHttpMethod),
-                    tokenRequestBody: configuration.TokenRequestBody),
+                    tokenRequestBody: configuration.TokenRequestBody,
+                    tokenRequestContentType: configuration.TokenRequestContentType,
+                    authScheme: configuration.TokenRequestTokenScheme),
                 _ => throw new ArgumentOutOfRangeException(
                     $"Unsupported combination of {nameof(RestApiPagedDynamicAuthStreamContext.ExpirationPeriodPropertyName)} and {nameof(RestApiPagedDynamicAuthStreamContext.ExpirationPeriod)}")
             };
