@@ -44,4 +44,14 @@ public abstract class RestApiStreamContextBase: IStreamContext, IStreamContextWr
     protected TResultType GetJSONSecretFromEnvironment<TResultType>(string secretName)
         => JsonSerializer.Deserialize<TResultType>(this.GetSecretFromEnvironment(secretName) ??
                                                    throw new ArgumentNullException($"{nameof(Arcane)}__{secretName}"));
+    protected TimeSpan? GetNullableTimeSpanObjectFromEnvironment(string secretName)
+    {
+        var raw = Environment.GetEnvironmentVariable($"{nameof(Arcane)}__{secretName}".ToUpperInvariant());
+        if (TimeSpan.TryParse(raw, out var value))
+        {
+            return value;
+        }
+
+        return null;
+    }
 }
