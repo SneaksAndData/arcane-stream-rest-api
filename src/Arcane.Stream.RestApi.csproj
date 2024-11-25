@@ -9,7 +9,7 @@
     
     <ItemGroup>
         <PackageReference Include="Arcane.Framework" Version="0.0.29" />
-        <PackageReference Include="SnD.Sdk" Version="1.1.21" />
+        <PackageReference Include="SnD.Sdk" Version="1.2.10" />
         <PackageReference Include="System.Text.Json" Version="8.0.4" />
     </ItemGroup>
     
