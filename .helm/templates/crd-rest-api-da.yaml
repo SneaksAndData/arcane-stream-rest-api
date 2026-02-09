@@ -38,6 +38,9 @@ spec:
             spec:
               type: object
               properties:
+                suspended:
+                  description: Suspended indicates whether the stream is suspended.
+                  type: boolean
                 credentialSecretRef:
                   description: |
                     Name of the secret containing the connection string.
@@ -164,14 +167,8 @@ spec:
               properties:
                 phase:
                   type: string
-                  enum:
-                    - RESTARTING
-                    - RUNNING
-                    - RELOADING
-                    - TERMINATING
-                    - STOPPED
-                    - SUSPENDED
-                    - FAILED
+                configurationHash:
+                  description: ConfigurationHash represents the hash of the current configuration.
                 conditions:
                   type: array
                   items:
@@ -184,11 +181,6 @@ spec:
                         type: string
                       type:
                         type: string
-                        enum:
-                          - WARNING
-                          - ERROR
-                          - INFO
-                          - READY
                       status:
                         type: string
                         enum: 
